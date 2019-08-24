@@ -1,10 +1,12 @@
+import java.util.Scanner;
+
 public class Vehicle {
     private String type;
     private String brand;
     private String model;
     private int year;
     private int mileage;
-    private String VIN;
+    private String VIN;;
 
     public Vehicle() {
     }
