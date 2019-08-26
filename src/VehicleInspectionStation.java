@@ -7,6 +7,7 @@ import java.util.Scanner;
 public class VehicleInspectionStation {
     private static Scanner scanner = new Scanner(System.in);
     private static File file = new File("pojazdy.csv");
+    private static Queue<Vehicle> vehicleQueue;
     public static void main(String[] args) {
         int option;
         System.out.println("Wybierz opcję: \n 0 - zamknij program \n 1 - wprowadź nowy pojazd \n " +
@@ -14,19 +15,19 @@ public class VehicleInspectionStation {
         try {
             option = scanner.nextInt();
             scanner.nextLine();
-            Queue<Vehicle> vehicleQueue = new LinkedList<>();
+            vehicleQueue = new LinkedList<>();
 
             if (file.exists()) {
-                readFile(vehicleQueue);
+                readFile();
             }
-            runChosenOption(option, vehicleQueue);
+            runChosenOption(option);
 
         } catch (InputMismatchException | IOException e) {
             System.out.println("Wybierz odpowiednią opcję");
         }
     }
 
-    private static void runChosenOption(int option, Queue<Vehicle> vehicleQueue) throws IOException {
+    private static void runChosenOption(int option) throws IOException {
         while (option != 0) {
             if (option == 1) {
                 vehicleQueue.offer(typeNewVehicle());
@@ -44,18 +45,15 @@ public class VehicleInspectionStation {
             option = scanner.nextInt();
             scanner.nextLine();
         }
-
-        if (option == 0) {
-                saveQueue(vehicleQueue);
-        }
+        saveQueue();
     }
 
-    private static File saveQueue(Queue<Vehicle> queue) throws IOException {
+    private static File saveQueue() throws IOException {
         BufferedWriter bw = new BufferedWriter(new FileWriter(file));
         Vehicle vehicle;
 
-        while(!queue.isEmpty()) {
-            vehicle = queue.poll();
+        while(!vehicleQueue.isEmpty()) {
+            vehicle = vehicleQueue.poll();
             bw.write(vehicle.getType() + ";" + vehicle.getBrand() + ";" + vehicle.getModel() + ";"
                     + vehicle.getYear() + ";" + vehicle.getMileage() + ";" + vehicle.getVIN());
             bw.newLine();
@@ -102,7 +100,7 @@ public class VehicleInspectionStation {
         }
     }
 
-    private static void readFile(Queue<Vehicle> vehicleQueue) throws IOException {
+    private static void readFile() throws IOException {
         BufferedReader br = new BufferedReader(new FileReader(file));
         String line = null;
         String[] data;
@@ -112,7 +110,6 @@ public class VehicleInspectionStation {
                 vehicleQueue.offer(new Vehicle(data[0], data[1], data[2], Integer.valueOf(data[3]),
                         Integer.valueOf(data[4]), data[5]));
             }
-
         br.close();
     }
 }
