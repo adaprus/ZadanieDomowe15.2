@@ -18,7 +18,6 @@ public class VehicleInspectionStation {
 
             if (file.exists()) {
                 readFile(vehicleQueue);
-                file.delete();
             }
             runChosenOption(option, vehicleQueue);
 
@@ -46,7 +45,7 @@ public class VehicleInspectionStation {
             scanner.nextLine();
         }
 
-        if (option == 0 && !vehicleQueue.isEmpty()) {
+        if (option == 0) {
                 saveQueue(vehicleQueue);
         }
     }
@@ -113,7 +112,7 @@ public class VehicleInspectionStation {
                 vehicleQueue.offer(new Vehicle(data[0], data[1], data[2], Integer.valueOf(data[3]),
                         Integer.valueOf(data[4]), data[5]));
             }
-        
+
         br.close();
     }
 }
